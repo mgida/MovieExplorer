@@ -13,3 +13,41 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Android/IntelliJ related files
+.idea/
+/.idea/caches/
+/.idea/libraries/
+/.idea/jsLibraryMappings.xml
+
+# Gradle files
+/build/
+*.jar
+*.war
+*.ear
+*.apk
+*.ap_
+
+# Java class files
+*.class
+
+# Log files
+*.log
+
+# Android Studio
+*.hprof
+
+# Generated files
+/captures/
+/output.json
+/.cxx/
+/.externalNativeBuild/
+
+
+# Windows
+Thumbs.db
+
+# Git files
+.git/
+
+apikeys.properties
