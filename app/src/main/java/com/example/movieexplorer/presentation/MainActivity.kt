@@ -1,4 +1,4 @@
-package com.example.movieexplorer
+package com.example.movieexplorer.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
