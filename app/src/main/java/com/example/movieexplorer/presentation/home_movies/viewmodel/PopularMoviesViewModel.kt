@@ -1,11 +1,11 @@
-package com.example.movieexplorer.presentation.viewmodel
+package com.example.movieexplorer.presentation.home_movies.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movieexplorer.data.dto.popular_movies.PopularMoviesResponse
 import com.example.movieexplorer.domain.mapper.UIPopularMoviesMapper
 import com.example.movieexplorer.domain.use_case.GetPopularMoviesUseCase
-import com.example.movieexplorer.presentation.PopularMoviesState
+import com.example.movieexplorer.presentation.home_movies.viewstate.PopularMoviesViewState
 import com.example.movieexplorer.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,8 +20,8 @@ class PopularMoviesViewModel @Inject constructor(
     private val popularMoviesMapper: UIPopularMoviesMapper
 ) : ViewModel() {
 
-    private val _popularMoviesState = MutableStateFlow(PopularMoviesState())
-    val bestPodcastsState: StateFlow<PopularMoviesState> = _popularMoviesState
+    private val _popularMoviesState = MutableStateFlow(PopularMoviesViewState())
+    val popularMoviesState: StateFlow<PopularMoviesViewState> = _popularMoviesState
 
     init {
         getPopularMovies()
@@ -32,17 +32,17 @@ class PopularMoviesViewModel @Inject constructor(
             when (resource) {
 
                 is Resource.Loading -> {
-                    _popularMoviesState.value = PopularMoviesState(isLoading = true)
+                    _popularMoviesState.value = PopularMoviesViewState(isLoading = true)
                 }
 
                 is Resource.Error -> {
                     _popularMoviesState.value =
-                        PopularMoviesState(error = resource.message.orEmpty())
+                        PopularMoviesViewState(error = resource.message.orEmpty())
                 }
 
                 is Resource.Success -> {
                     _popularMoviesState.value =
-                        PopularMoviesState(
+                        PopularMoviesViewState(
                             data = popularMoviesMapper.map(resource.data?.results ?: listOf())
                         )
                 }
