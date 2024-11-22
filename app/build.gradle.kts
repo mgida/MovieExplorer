@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("kotlin-kapt")
+    alias(libs.plugins.hilt)
+
 }
 
 android {
@@ -38,6 +41,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.7"
@@ -54,13 +58,53 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+
+
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.compose.animation)
+
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+
+    implementation(libs.kotlinx.coroutines)
+    implementation(libs.kotlinx.coroutines.test)
+
+    implementation(libs.mockito.test)
+    implementation(libs.mockito.kotlin.test)
+
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.okhttp)
+    implementation(libs.moshi)
+    implementation(libs.moshi.kotlin)
+    kapt(libs.moshi.codegen)
+    implementation(libs.retrofit.converter.moshi)
+    implementation(libs.mock.webserver)
+
+    implementation(libs.dagger.hilt)
+    implementation(libs.dagger.hilt.navigation.compose)
+    kapt(libs.dagger.hilt.compiler)
+
+    implementation(libs.lifecycle.viewmodel.compose)
+
+    implementation(libs.coil)
+
+    implementation(libs.androidx.navigation)
+    implementation(libs.timber)
+    implementation(libs.pager)
+    implementation(libs.constraint.layout)
+    implementation(libs.splash)
+
+
     testImplementation(libs.junit)
+    testImplementation(libs.turbine)
+
     androidTestImplementation(libs.androidx.junit)
+
+    androidTestImplementation(libs.androidx.truth)
+    implementation(libs.androidx.truth)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
