@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.movieexplorer.presentation.home_movies.components.HomeContent
-import com.example.movieexplorer.presentation.movie_details.components.DetailsContent
+import com.example.movieexplorer.presentation.movie_details.components.DetailsScreen
 import com.example.movieexplorer.util.Screen
 
 @Composable
@@ -33,7 +33,7 @@ fun MovieNavHost(
             route = Screen.MovieDetails.routeWithArgs,
             arguments = Screen.MovieDetails.navArgument
         ) {
-            DetailsContent(modifier = Modifier.fillMaxSize())
+            DetailsScreen(modifier = Modifier.fillMaxSize())
         }
     }
 }

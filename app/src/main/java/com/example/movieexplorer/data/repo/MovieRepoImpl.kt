@@ -10,4 +10,5 @@ class MovieRepoImpl(
     override suspend fun searchMovies(query: String) = remoteDataSource.searchMovies(query)
     override suspend fun getMovieDetails(movieId: Int) = remoteDataSource.getMovieDetails(movieId)
     override suspend fun getSimilarMovies(movieId: Int) = remoteDataSource.getSimilarMovies(movieId)
+    override suspend fun getMovieCredits(movieId: Int) = remoteDataSource.getMovieCredits(movieId)
 }

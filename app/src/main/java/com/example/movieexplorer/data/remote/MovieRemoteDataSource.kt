@@ -1,5 +1,6 @@
 package com.example.movieexplorer.data.remote
 
+import com.example.movieexplorer.data.dto.credits.MovieCreditsResponse
 import com.example.movieexplorer.data.dto.movie_details.MovieDetailsResponse
 import com.example.movieexplorer.data.dto.popular_movies.PopularMoviesResponse
 import com.example.movieexplorer.data.dto.similar_movies.SimilarMoviesResponse
@@ -30,4 +31,10 @@ interface MovieRemoteDataSource {
     suspend fun getSimilarMovies(
         @Path("movie_id") movieId: Int
     ): SimilarMoviesResponse
+
+    @Authorized
+    @GET("movie/{movie_id}/credits")
+    suspend fun getMovieCredits(
+        @Path("movie_id") movieId: Int
+    ): MovieCreditsResponse
 }

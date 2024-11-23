@@ -3,13 +3,17 @@ package com.example.movieexplorer.presentation.movie_details.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.movieexplorer.data.dto.credits.MovieCreditsResponse
 import com.example.movieexplorer.data.dto.movie_details.MovieDetailsResponse
 import com.example.movieexplorer.data.dto.similar_movies.SimilarMoviesResponse
 import com.example.movieexplorer.domain.mapper.UIMovieDetailsMapper
 import com.example.movieexplorer.domain.mapper.UISimilarMoviesMapper
+import com.example.movieexplorer.domain.use_case.GetMovieCreditsUseCase
 import com.example.movieexplorer.domain.use_case.GetMovieDetailsUseCase
 import com.example.movieexplorer.domain.use_case.GetSimilarMoviesUseCase
+import com.example.movieexplorer.domain.use_case.ProcessCreditsUseCase
 import com.example.movieexplorer.presentation.movie_details.event.MovieDetailsEvent
+import com.example.movieexplorer.presentation.movie_details.viewstate.CreditsViewState
 import com.example.movieexplorer.presentation.movie_details.viewstate.MovieDetailsViewState
 import com.example.movieexplorer.presentation.movie_details.viewstate.SimilarMoviesViewState
 import com.example.movieexplorer.util.MOVIE_ID_ARG
@@ -27,6 +31,8 @@ class MovieDetailsViewModel @Inject constructor(
     private val uIMovieDetailsMapper: UIMovieDetailsMapper,
     private val getSimilarMoviesUseCase: GetSimilarMoviesUseCase,
     private val uiSimilarMoviesMapper: UISimilarMoviesMapper,
+    private val getMovieCreditsUseCase: GetMovieCreditsUseCase,
+    private val creditsUseCase: ProcessCreditsUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -37,14 +43,47 @@ class MovieDetailsViewModel @Inject constructor(
     private val _similarMoviesViewState = MutableStateFlow(SimilarMoviesViewState())
     val similarMoviesViewState: StateFlow<SimilarMoviesViewState> = _similarMoviesViewState
 
+    private val _creditsViewState = MutableStateFlow(CreditsViewState())
+    val creditsViewState: StateFlow<CreditsViewState> = _creditsViewState
 
     init {
         savedStateHandle.get<Int>(MOVIE_ID_ARG).also { movieId ->
             movieId?.let {
                 getMovieDetails(movieId = it)
                 getSimilarMovies(movieId = it)
+                getMovieCredits(movieId)
             }
         }
+    }
+
+    private fun getMovieCredits(movieId: Int) {
+        getMovieCreditsUseCase.invoke(movieId = movieId)
+            .onEach { resource: Resource<MovieCreditsResponse> ->
+                when (resource) {
+
+                    is Resource.Loading -> {
+                        _creditsViewState.value = CreditsViewState(isLoading = true)
+                    }
+
+                    is Resource.Error -> {
+
+                        _creditsViewState.value =
+                            CreditsViewState(error = resource.message.orEmpty())
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.let { movieCreditsResponse ->
+
+                            val (actors, directors) = creditsUseCase.invoke(movieCreditsResponse)
+                            _creditsViewState.value = CreditsViewState(
+                                actors = actors ?: listOf(),
+                                directors = directors ?: listOf()
+                            )
+                        }
+                    }
+                }
+
+            }.launchIn(viewModelScope)
     }
 
 
@@ -107,5 +146,4 @@ class MovieDetailsViewModel @Inject constructor(
 
             }.launchIn(viewModelScope)
     }
-
 }
