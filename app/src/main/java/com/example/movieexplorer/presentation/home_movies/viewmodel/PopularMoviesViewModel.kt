@@ -2,9 +2,8 @@ package com.example.movieexplorer.presentation.home_movies.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.movieexplorer.data.dto.popular_movies.PopularMoviesResponse
-import com.example.movieexplorer.domain.mapper.UIPopularMoviesMapper
-import com.example.movieexplorer.domain.use_case.GetPopularMoviesUseCase
+import com.example.movieexplorer.domain.model.popular_movies.PopularMoviesGroupedByYearModel
+import com.example.movieexplorer.domain.use_case.GetPopularMoviesGroupedByYearByUseCase
 import com.example.movieexplorer.presentation.home_movies.viewstate.PopularMoviesViewState
 import com.example.movieexplorer.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,8 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PopularMoviesViewModel @Inject constructor(
-    private val popularMoviesUseCase: GetPopularMoviesUseCase,
-    private val popularMoviesMapper: UIPopularMoviesMapper
+    private val groupedYearByUseCase: GetPopularMoviesGroupedByYearByUseCase
 ) : ViewModel() {
 
     private val _popularMoviesState = MutableStateFlow(PopularMoviesViewState())
@@ -28,26 +26,25 @@ class PopularMoviesViewModel @Inject constructor(
     }
 
     private fun getPopularMovies() {
-        popularMoviesUseCase.invoke().onEach { resource: Resource<PopularMoviesResponse> ->
-            when (resource) {
+        groupedYearByUseCase.invoke()
+            .onEach { resource: Resource<List<PopularMoviesGroupedByYearModel>> ->
+                when (resource) {
 
-                is Resource.Loading -> {
-                    _popularMoviesState.value = PopularMoviesViewState(isLoading = true)
+                    is Resource.Loading -> {
+                        _popularMoviesState.value = PopularMoviesViewState(isLoading = true)
+                    }
+
+                    is Resource.Error -> {
+                        _popularMoviesState.value =
+                            PopularMoviesViewState(error = resource.message.orEmpty())
+                    }
+
+                    is Resource.Success -> {
+                        _popularMoviesState.value =
+                            PopularMoviesViewState(data = resource.data ?: listOf())
+                    }
                 }
 
-                is Resource.Error -> {
-                    _popularMoviesState.value =
-                        PopularMoviesViewState(error = resource.message.orEmpty())
-                }
-
-                is Resource.Success -> {
-                    _popularMoviesState.value =
-                        PopularMoviesViewState(
-                            data = popularMoviesMapper.map(resource.data?.results ?: listOf())
-                        )
-                }
-            }
-
-        }.launchIn(viewModelScope)
+            }.launchIn(viewModelScope)
     }
 }
