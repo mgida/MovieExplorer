@@ -7,4 +7,5 @@ class MovieRepoImpl(
     private val remoteDataSource: MovieRemoteDataSource
 ) : MovieRepo {
     override suspend fun getPopularMovies() = remoteDataSource.getPopularMovies()
+    override suspend fun searchMovies(query:String) = remoteDataSource.searchMovies(query)
 }
