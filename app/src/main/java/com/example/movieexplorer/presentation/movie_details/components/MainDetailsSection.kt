@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.example.movieexplorer.domain.model.movie_details.MovieDetailsModel
 import com.example.movieexplorer.util.ThemePreviews
@@ -73,39 +75,53 @@ fun MainDetailsSection(
         Text(
             text = movieDetails.title,
             style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(16.dp)
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
         )
 
         Text(
             text = movieDetails.tagLine,
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            ),
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
 
         Text(
             text = movieDetails.overview,
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8F)
+            ),
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            maxLines = 5,
-            overflow = TextOverflow.Ellipsis
+            maxLines = 3,
+            overflow = TextOverflow.Ellipsis,
+            lineHeight = 20.sp
         )
 
         Text(
             text = "Release Date: ${movieDetails.releaseDate}",
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodySmall.copy(
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8F)
+            ),
             modifier = Modifier.padding(horizontal = 16.dp)
         )
 
+        Spacer(modifier = Modifier.height(6.dp))
+
         Text(
             text = "Status: ${movieDetails.status}",
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodySmall.copy(
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8F)
+            ),
             modifier = Modifier.padding(horizontal = 16.dp)
         )
 
         Text(
             text = "Revenue: ${movieDetails.revenue}",
-            style = MaterialTheme.typography.bodySmall,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            style = MaterialTheme.typography.bodySmall.copy(
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8F)
+            ),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
         )
     }
 

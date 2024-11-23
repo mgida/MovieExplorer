@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.movieexplorer.domain.model.popular_movies.PopularMovieModel
+import com.example.movieexplorer.ui.theme.MovieExplorerTheme
 import com.example.movieexplorer.util.ThemePreviews
 import com.example.movieexplorer.util.getMockPopularMovies
 
@@ -20,12 +21,15 @@ fun YearSection(
     onMovieClicked: (Int) -> Unit
 ) {
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
     ) {
         Text(
             text = year,
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(bottom = 8.dp)
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(bottom = 12.dp)
         )
 
         movies.forEach { movie ->
@@ -42,7 +46,7 @@ fun YearSection(
 fun YearSectionPreview() {
     val mockMovies = getMockPopularMovies()
 
-    MaterialTheme {
+    MovieExplorerTheme {
         YearSection(
             year = "2024",
             movies = mockMovies,

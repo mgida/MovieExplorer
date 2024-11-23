@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -56,37 +56,35 @@ fun DetailsScreen(
             val actors = creditsState.actors
             val directors = creditsState.directors
 
-            LazyColumn(
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
+            Surface(
+                modifier = modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background
             ) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
 
-                item {
-                    MainDetailsMovie(
-                        movieDetails = movieDetails,
-                        isInWatchlist = isInWatchlist,
-                        onWatchlistToggle = {
-                            viewModel.toggleWatchlist(movieDetails)
-                        }
-                    )
+                    item {
+                        MainDetailsMovie(
+                            movieDetails = movieDetails,
+                            isInWatchlist = isInWatchlist,
+                            onWatchlistToggle = {
+                                viewModel.toggleWatchlist(movieDetails)
+                            }
+                        )
+                    }
+
+                    item { Spacer(modifier = Modifier.height(16.dp)) }
+
+                    item { SimilarMoviesContent(similarMoviesState, similarMovies) }
+
+                    item { Spacer(modifier = Modifier.height(16.dp)) }
+
+                    item { TopCreditsContent(creditsState, actors, directors) }
+
                 }
-
-                item { Spacer(modifier = Modifier.height(16.dp)) }
-
-                item {
-                    Text(
-                        text = "Similar Movies",
-                        style = MaterialTheme.typography.headlineMedium,
-                        modifier = Modifier.padding(vertical = 8.dp)
-                    )
-                    SimilarMoviesContent(similarMoviesState, similarMovies)
-                }
-
-                item { Spacer(modifier = Modifier.height(16.dp)) }
-
-                item { TopCreditsContent(creditsState, actors, directors) }
-
             }
         }
     }
@@ -98,11 +96,6 @@ private fun TopCreditsContent(
     actors: List<CastModel>,
     directors: List<CrewModel>
 ) {
-    Text(
-        text = "Top Cast & Crew",
-        style = MaterialTheme.typography.headlineMedium,
-        modifier = Modifier.padding(vertical = 8.dp)
-    )
     if (creditsState.isLoading) {
         LoadingIndicator(modifier = Modifier.fillMaxWidth())
     } else if (creditsState.error.isNotBlank()) {

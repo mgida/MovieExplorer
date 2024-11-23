@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.movieexplorer.domain.model.movie_credits.CastModel
 import com.example.movieexplorer.domain.model.movie_credits.CrewModel
+import com.example.movieexplorer.ui.theme.MovieExplorerTheme
 import com.example.movieexplorer.util.ThemePreviews
 
 
@@ -22,7 +23,9 @@ fun TopCreditsSection(
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp)
     ) {
 
         Column(
@@ -31,7 +34,8 @@ fun TopCreditsSection(
             Text(
                 text = "Top Actors",
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
             )
             actors.forEach { actor ->
                 CreditItem(
@@ -48,7 +52,8 @@ fun TopCreditsSection(
             Text(
                 text = "Top Directors",
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
             )
             directors.forEach { director ->
                 CreditItem(
@@ -103,8 +108,10 @@ fun TopCreditsSectionPreview() {
         )
     )
 
-    TopCreditsSection(
-        actors = sampleActors,
-        directors = sampleDirectors
-    )
+    MovieExplorerTheme {
+        TopCreditsSection(
+            actors = sampleActors,
+            directors = sampleDirectors
+        )
+    }
 }

@@ -2,6 +2,8 @@ package com.example.movieexplorer.presentation.home_movies.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -29,26 +31,34 @@ fun HomeContent(
     val state = viewModel.popularMoviesState.collectAsState().value
     var searchQuery by remember { mutableStateOf("") }
 
-    Column(modifier = modifier.fillMaxSize()) {
-        SearchBar(
-            query = searchQuery,
-            onQueryChanged = { query ->
-                searchQuery = query
-                if (query.length > MIN_LENGTH) {
-                    viewModel.onEvent(SearchMoviesEvent.SearchMovies(query = query))
+    Surface(
+        modifier = modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            SearchBar(
+                query = searchQuery,
+                onQueryChanged = { query ->
+                    searchQuery = query
+                    if (query.length > MIN_LENGTH) {
+                        viewModel.onEvent(SearchMoviesEvent.SearchMovies(query = query))
+                    }
                 }
-            }
-        )
+            )
 
-        when {
-            state.isLoading -> LoadingIndicator(modifier = modifier)
+            when {
+                state.isLoading -> LoadingIndicator(modifier = modifier)
 
-            state.error.isNotBlank() -> ErrorMessage(modifier = modifier, message = "")
+                state.error.isNotBlank() -> ErrorMessage(modifier = modifier, message = state.error)
 
-            state.data.isEmpty() -> EmptyStateMessage(modifier = modifier)
+                state.data.isEmpty() -> EmptyStateMessage(
+                    modifier = modifier,
+                    message = "No movies found. Try searching again."
+                )
 
-            else -> MoviesContent(modifier, state.data) { movieId ->
-                onNavigateToDetails.invoke(movieId)
+                else -> MoviesContent(modifier, state.data) { movieId ->
+                    onNavigateToDetails.invoke(movieId)
+                }
             }
         }
     }

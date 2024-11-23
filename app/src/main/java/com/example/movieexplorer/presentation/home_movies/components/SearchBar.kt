@@ -5,11 +5,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.movieexplorer.ui.theme.MovieExplorerTheme
 import com.example.movieexplorer.util.ThemePreviews
 
 
@@ -25,7 +27,12 @@ fun SearchBar(
         modifier = modifier
             .fillMaxWidth()
             .padding(16.dp),
-        placeholder = { Text(text = "Search movies...") },
+        placeholder = {
+            Text(
+                text = "Search movies...", style =
+                MaterialTheme.typography.labelMedium
+            )
+        },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
@@ -39,5 +46,7 @@ fun SearchBar(
 @ThemePreviews
 @Composable
 fun SearchBarPreview() {
-    SearchBar(query = "") {}
+    MovieExplorerTheme {
+        SearchBar(query = "") {}
+    }
 }

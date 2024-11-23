@@ -6,12 +6,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.movieexplorer.domain.model.popular_movies.PopularMoviesGroupedByYearModel
+import com.example.movieexplorer.ui.theme.MovieExplorerTheme
 import com.example.movieexplorer.util.ThemePreviews
 import com.example.movieexplorer.util.getMockMoviesGroupedByYear
 import timber.log.Timber
@@ -29,8 +29,10 @@ fun MoviesContent(
     }
 
     LazyColumn(
-        modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        contentPadding = PaddingValues(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
@@ -47,10 +49,10 @@ fun MoviesContent(
 fun MoviesContentPreview() {
     val mockMoviesGroupedByYear = getMockMoviesGroupedByYear()
 
-    MaterialTheme {
+    MovieExplorerTheme {
         MoviesContent(
             moviesGroupedByYear = mockMoviesGroupedByYear,
             modifier = Modifier.padding(16.dp)
-        ){}
+        ) {}
     }
 }

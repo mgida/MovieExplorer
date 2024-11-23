@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.movieexplorer.ui.theme.MovieExplorerTheme
 import com.example.movieexplorer.util.ThemePreviews
 
 
@@ -28,7 +29,7 @@ fun CreditItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
+            .padding(start = 16.dp, top = 8.dp, bottom = 8.dp)
     ) {
         AsyncImage(
             model = profilePath,
@@ -41,14 +42,16 @@ fun CreditItem(
         Column {
             Text(
                 text = name,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
             Text(
+                modifier = Modifier.padding(top = 4.dp),
                 text = role,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
             )
         }
     }
@@ -57,9 +60,11 @@ fun CreditItem(
 @ThemePreviews
 @Composable
 fun CreditItemPreview() {
-    CreditItem(
-        name = "Nolan",
-        role = "Director",
-        profilePath = ""
-    )
+    MovieExplorerTheme {
+        CreditItem(
+            name = "Nolan",
+            role = "Director",
+            profilePath = ""
+        )
+    }
 }

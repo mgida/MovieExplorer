@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.example.movieexplorer.domain.model.similar_movies.SimilarMovieModel
+import com.example.movieexplorer.ui.theme.MovieExplorerTheme
 import com.example.movieexplorer.util.ThemePreviews
 
 @Composable
@@ -38,7 +39,9 @@ fun SimilarMovieCard(movie: SimilarMovieModel, modifier: Modifier = Modifier) {
 
         Text(
             text = movie.title,
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6F)
+            ),
             modifier = Modifier.padding(vertical = 4.dp),
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
@@ -49,12 +52,14 @@ fun SimilarMovieCard(movie: SimilarMovieModel, modifier: Modifier = Modifier) {
 @ThemePreviews
 @Composable
 fun SimilarMovieCardPreview() {
-    SimilarMovieCard(
-        movie = SimilarMovieModel(
-            id = 9498, title = "Inception",
-            overview = "Awesome..",
-            image = ""
-        ),
-        modifier = Modifier.padding(8.dp)
-    )
+    MovieExplorerTheme {
+        SimilarMovieCard(
+            movie = SimilarMovieModel(
+                id = 9498, title = "Inception",
+                overview = "Awesome..",
+                image = ""
+            ),
+            modifier = Modifier.padding(8.dp)
+        )
+    }
 }
