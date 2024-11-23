@@ -1,13 +1,10 @@
 package com.example.movieexplorer.presentation.home_movies.components
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.movieexplorer.domain.model.popular_movies.PopularMoviesGroupedByYearModel
 import com.example.movieexplorer.presentation.home_movies.viewmodel.PopularMoviesViewModel
-import timber.log.Timber
 
 
 @Composable
@@ -20,24 +17,22 @@ fun HomeContent(
     val state = viewModel.popularMoviesState.collectAsState().value
 
     when {
-        state.isLoading -> {}
+        state.isLoading -> LoadingIndicator(modifier = modifier)
 
-        state.error.isNotBlank() -> {}
+        state.error.isNotBlank() -> ErrorMessage(modifier = modifier, message = "")
 
-        state.data.isEmpty() -> {}
+        state.data.isEmpty() -> EmptyStateMessage(modifier = modifier)
 
         else -> {
-            MoviesResult(state.data)
+            MoviesContent(modifier, state.data)
         }
     }
 }
 
-@Composable
-fun MoviesResult(moviesGroupedByYearModels: List<PopularMoviesGroupedByYearModel>) {
 
-    SideEffect {
-        moviesGroupedByYearModels.forEach { group ->
-            Timber.d("Year: ${group.year} -> Movies: ${group.movies.joinToString { it.title }}")
-        }
-    }
-}
+
+
+
+
+
+
