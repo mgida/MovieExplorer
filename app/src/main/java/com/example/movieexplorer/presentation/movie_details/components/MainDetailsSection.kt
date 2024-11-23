@@ -1,14 +1,24 @@
 package com.example.movieexplorer.presentation.movie_details.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -22,10 +32,13 @@ import com.example.movieexplorer.util.ThemePreviews
 @Composable
 fun MainDetailsSection(
     modifier: Modifier = Modifier,
-    movieDetails: MovieDetailsModel
+    movieDetails: MovieDetailsModel,
+    isInWatchList: Boolean,
+    onWatchListToggle: (MovieDetailsModel) -> Unit
 ) {
 
-    Column(modifier = modifier) {
+
+    Box(modifier = Modifier.fillMaxWidth()) {
         Image(
             painter = rememberAsyncImagePainter(movieDetails.image),
             contentDescription = "Movie Poster",
@@ -36,6 +49,27 @@ fun MainDetailsSection(
             contentScale = ContentScale.Crop
         )
 
+        IconButton(
+            onClick = { onWatchListToggle(movieDetails) },
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(16.dp)
+                .size(48.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.surface.copy(alpha = 0.7f),
+                    shape = CircleShape
+                )
+        ) {
+            Icon(
+                imageVector = if (isInWatchList) Icons.Default.Check else Icons.Default.Add,
+                contentDescription = if (isInWatchList) "Remove from Watch List" else "Add to Watch List",
+                tint = MaterialTheme.colorScheme.primary
+            )
+        }
+    }
+
+
+    Column(modifier = modifier) {
         Text(
             text = movieDetails.title,
             style = MaterialTheme.typography.headlineMedium,
@@ -91,7 +125,5 @@ fun MainDetailsSectionPreview() {
         revenue = "$2,798,000,000"
     )
 
-    MainDetailsSection(
-        movieDetails = sampleMovieDetails
-    )
+    MainDetailsSection(movieDetails = sampleMovieDetails, isInWatchList = true) {}
 }

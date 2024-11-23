@@ -109,6 +109,11 @@ dependencies {
     implementation(libs.constraint.layout)
     implementation(libs.splash)
 
+    implementation(libs.room)
+    implementation(libs.room.ktx)
+    implementation(libs.room.testing)
+    ksp(libs.room.compiler)
+
 
     testImplementation(libs.junit)
     testImplementation(libs.turbine)

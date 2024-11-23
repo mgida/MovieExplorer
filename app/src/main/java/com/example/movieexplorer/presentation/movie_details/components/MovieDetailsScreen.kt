@@ -13,7 +13,9 @@ import com.example.movieexplorer.domain.model.movie_details.MovieDetailsModel
 @Composable
 fun MainDetailsMovie(
     modifier: Modifier = Modifier,
-    movieDetails: MovieDetailsModel
+    movieDetails: MovieDetailsModel,
+    isInWatchlist: Boolean,
+    onWatchlistToggle: () -> Unit
 ) {
     LazyColumn(
         modifier = modifier
@@ -22,7 +24,14 @@ fun MainDetailsMovie(
     ) {
 
         item {
-            MainDetailsSection(modifier = modifier, movieDetails)
+            MainDetailsSection(
+                modifier = modifier,
+                movieDetails = movieDetails,
+                isInWatchList = isInWatchlist,
+                onWatchListToggle = {
+                    onWatchlistToggle.invoke()
+                }
+            )
             Spacer(modifier = Modifier.height(16.dp))
         }
     }

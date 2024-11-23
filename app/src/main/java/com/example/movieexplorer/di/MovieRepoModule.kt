@@ -1,5 +1,6 @@
 package com.example.movieexplorer.di
 
+import com.example.movieexplorer.data.local.MovieLocalDataSource
 import com.example.movieexplorer.data.remote.MovieRemoteDataSource
 import com.example.movieexplorer.data.repo.MovieRepoImpl
 import com.example.movieexplorer.domain.repo.MovieRepo
@@ -15,9 +16,11 @@ object MovieRepoModule {
     @Provides
     @Singleton
     fun provideMovieRepo(
-        remoteDataSource: MovieRemoteDataSource
+        remoteDataSource: MovieRemoteDataSource,
+        localDataSource: MovieLocalDataSource,
     ): MovieRepo =
         MovieRepoImpl(
-            remoteDataSource = remoteDataSource
+            remoteDataSource = remoteDataSource,
+            localDataSource = localDataSource
         )
 }

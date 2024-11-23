@@ -8,10 +8,13 @@ import com.example.movieexplorer.data.dto.movie_details.MovieDetailsResponse
 import com.example.movieexplorer.data.dto.similar_movies.SimilarMoviesResponse
 import com.example.movieexplorer.domain.mapper.UIMovieDetailsMapper
 import com.example.movieexplorer.domain.mapper.UISimilarMoviesMapper
+import com.example.movieexplorer.domain.model.movie_details.MovieDetailsModel
+import com.example.movieexplorer.domain.use_case.DeleteMovieUseCase
 import com.example.movieexplorer.domain.use_case.GetMovieCreditsUseCase
 import com.example.movieexplorer.domain.use_case.GetMovieDetailsUseCase
 import com.example.movieexplorer.domain.use_case.GetSimilarMoviesUseCase
 import com.example.movieexplorer.domain.use_case.ProcessCreditsUseCase
+import com.example.movieexplorer.domain.use_case.SaveMovieUseCase
 import com.example.movieexplorer.presentation.movie_details.event.MovieDetailsEvent
 import com.example.movieexplorer.presentation.movie_details.viewstate.CreditsViewState
 import com.example.movieexplorer.presentation.movie_details.viewstate.MovieDetailsViewState
@@ -23,6 +26,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,6 +37,9 @@ class MovieDetailsViewModel @Inject constructor(
     private val uiSimilarMoviesMapper: UISimilarMoviesMapper,
     private val getMovieCreditsUseCase: GetMovieCreditsUseCase,
     private val creditsUseCase: ProcessCreditsUseCase,
+
+    private val deleteMovieUseCase: DeleteMovieUseCase,
+    private val saveMovieUseCase: SaveMovieUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -45,6 +52,9 @@ class MovieDetailsViewModel @Inject constructor(
 
     private val _creditsViewState = MutableStateFlow(CreditsViewState())
     val creditsViewState: StateFlow<CreditsViewState> = _creditsViewState
+
+    private val _isInWatchlist = MutableStateFlow(false)
+    val isInWatchlist: StateFlow<Boolean> = _isInWatchlist
 
     init {
         savedStateHandle.get<Int>(MOVIE_ID_ARG).also { movieId ->
@@ -93,6 +103,24 @@ class MovieDetailsViewModel @Inject constructor(
             is MovieDetailsEvent.GetSimilarMovies -> getSimilarMovies(movieDetailsEvent.movieId)
         }
     }
+
+
+    fun toggleWatchlist(movie: MovieDetailsModel) {
+        viewModelScope.launch {
+            if (_isInWatchlist.value) {
+                deleteMovieUseCase(movie = movie)
+            } else {
+                saveMovieUseCase(movie = movie)
+            }
+            _isInWatchlist.value = !_isInWatchlist.value
+        }
+    }
+
+//    fun checkWatchlist(movieId: Int) {
+//        viewModelScope.launch {
+//            _isInWatchlist.value = checkWatchlistUseCase(movieId)
+//        }
+//    }
 
     private fun getSimilarMovies(movieId: Int) {
         getSimilarMoviesUseCase.invoke(movieId = movieId)

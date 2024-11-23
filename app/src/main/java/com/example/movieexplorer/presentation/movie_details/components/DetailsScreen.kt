@@ -36,6 +36,9 @@ fun DetailsScreen(
     val similarMoviesState = viewModel.similarMoviesViewState.collectAsState().value
     val creditsState = viewModel.creditsViewState.collectAsState().value
 
+    val isInWatchlist = viewModel.isInWatchlist.collectAsState().value
+
+
 
     when {
         movieDetailsState.isLoading -> LoadingIndicator(modifier = modifier)
@@ -47,9 +50,7 @@ fun DetailsScreen(
 
         movieDetailsState.data == null -> EmptyStateMessage(modifier = modifier)
 
-
         else -> {
-
             val movieDetails = movieDetailsState.data
             val similarMovies = similarMoviesState.data.take(MAX_DISPLAYED_MOVIES)
             val actors = creditsState.actors
@@ -61,7 +62,15 @@ fun DetailsScreen(
                     .padding(16.dp)
             ) {
 
-                item { MainDetailsMovie(movieDetails = movieDetails) }
+                item {
+                    MainDetailsMovie(
+                        movieDetails = movieDetails,
+                        isInWatchlist = isInWatchlist,
+                        onWatchlistToggle = {
+                            viewModel.toggleWatchlist(movieDetails)
+                        }
+                    )
+                }
 
                 item { Spacer(modifier = Modifier.height(16.dp)) }
 
