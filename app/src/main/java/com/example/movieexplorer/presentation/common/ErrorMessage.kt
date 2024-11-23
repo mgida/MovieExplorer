@@ -1,4 +1,4 @@
-package com.example.movieexplorer.presentation.home_movies.components
+package com.example.movieexplorer.presentation.common
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

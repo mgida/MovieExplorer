@@ -1,6 +1,7 @@
 package com.example.movieexplorer.presentation.home_movies.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,12 +30,16 @@ import com.example.movieexplorer.util.getMockPopularMovie
 @Composable
 fun MovieCard(
     modifier: Modifier = Modifier,
-    movie: PopularMovieModel
+    movie: PopularMovieModel,
+    onMovieClicked: (Int) -> Unit
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(bottom = 8.dp),
+            .padding(bottom = 8.dp)
+            .clickable {
+                onMovieClicked.invoke(movie.id)
+            },
     ) {
         Row(
             modifier = Modifier.padding(8.dp),
@@ -78,12 +83,12 @@ fun MovieCard(
 @ThemePreviews
 @Composable
 fun MovieCardPreview() {
-    val mockMovie = getMockPopularMovie()
+    val mockMovie = getMockPopularMovie(3)
 
     MaterialTheme {
         MovieCard(
             movie = mockMovie,
             modifier = Modifier.padding(16.dp)
-        )
+        ) {}
     }
 }

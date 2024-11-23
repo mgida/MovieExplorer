@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.movieexplorer.presentation.home_movies.components.HomeContent
-import com.example.movieexplorer.presentation.movie_details.components.MovieDetail
+import com.example.movieexplorer.presentation.movie_details.components.DetailsContent
 import com.example.movieexplorer.util.Screen
 
 @Composable
@@ -24,7 +24,8 @@ fun MovieNavHost(
         composable(
             route = Screen.HomeMovies.route,
         ) {
-            HomeContent(modifier = Modifier.fillMaxSize(), onNavigateToDetails = { _ ->
+            HomeContent(modifier = Modifier.fillMaxSize(), onNavigateToDetails = { movieId ->
+                navigateToDetailsScreen(navController, movieId)
             })
         }
 
@@ -32,12 +33,12 @@ fun MovieNavHost(
             route = Screen.MovieDetails.routeWithArgs,
             arguments = Screen.MovieDetails.navArgument
         ) {
-            MovieDetail(modifier = Modifier.fillMaxSize())
+            DetailsContent(modifier = Modifier.fillMaxSize())
         }
     }
 }
 
-private fun navigateToDetailsScreen(navController: NavHostController, movieId: String) {
+private fun navigateToDetailsScreen(navController: NavHostController, movieId: Int) {
     navController.navigate(Screen.MovieDetails.createRoute(movieId = movieId)) {
         launchSingleTop = true
         restoreState = true

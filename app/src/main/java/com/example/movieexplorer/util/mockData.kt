@@ -18,11 +18,12 @@ fun getMockMoviesGroupedByYear(): List<PopularMoviesGroupedByYearModel> {
 }
 
 fun getMockPopularMovies() = listOf(
-    getMockPopularMovie(),
-    getMockPopularMovie()
+    getMockPopularMovie(1),
+    getMockPopularMovie(2)
 )
 
-fun getMockPopularMovie() = PopularMovieModel(
+fun getMockPopularMovie(id:Int) = PopularMovieModel(
+    id = id,
     title = "The Shawshank Redemption",
     overview = "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
     image = "https://image.tmdb.org/t/p/w500/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",

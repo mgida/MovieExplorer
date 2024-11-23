@@ -16,7 +16,8 @@ import com.example.movieexplorer.util.getMockPopularMovies
 fun YearSection(
     modifier: Modifier = Modifier,
     year: String,
-    movies: List<PopularMovieModel>
+    movies: List<PopularMovieModel>,
+    onMovieClicked: (Int) -> Unit
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
@@ -28,7 +29,9 @@ fun YearSection(
         )
 
         movies.forEach { movie ->
-            MovieCard(movie = movie)
+            MovieCard(movie = movie) { movieId ->
+                onMovieClicked.invoke(movieId)
+            }
         }
     }
 }
@@ -44,6 +47,6 @@ fun YearSectionPreview() {
             year = "2024",
             movies = mockMovies,
             modifier = Modifier.padding(16.dp)
-        )
+        ){}
     }
 }

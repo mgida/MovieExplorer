@@ -13,11 +13,11 @@ sealed class Screen(val route: String) {
     data object MovieDetails : Screen(MOVIE_DETAIL) {
 
         val routeWithArgs = "$route?$MOVIE_ID_ARG={$MOVIE_ID_ARG}"
-        fun createRoute(movieId: String) = "$route?$MOVIE_ID_ARG=$movieId"
+        fun createRoute(movieId: Int) = "$route?$MOVIE_ID_ARG=$movieId"
 
         val navArgument = listOf(navArgument(name = MOVIE_ID_ARG) {
-            type = NavType.StringType
-            defaultValue = ""
+            type = NavType.IntType
+            defaultValue = -1
         })
     }
 }

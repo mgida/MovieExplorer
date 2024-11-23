@@ -19,7 +19,8 @@ import timber.log.Timber
 @Composable
 fun MoviesContent(
     modifier: Modifier = Modifier,
-    moviesGroupedByYear: List<PopularMoviesGroupedByYearModel>
+    moviesGroupedByYear: List<PopularMoviesGroupedByYearModel>,
+    onMovieClicked: (Int) -> Unit
 ) {
     SideEffect {
         moviesGroupedByYear.forEach { group ->
@@ -34,7 +35,9 @@ fun MoviesContent(
     ) {
 
         items(moviesGroupedByYear) { group ->
-            YearSection(year = group.year, movies = group.movies)
+            YearSection(year = group.year, movies = group.movies) { movieId ->
+                onMovieClicked.invoke(movieId)
+            }
         }
     }
 }
@@ -48,6 +51,6 @@ fun MoviesContentPreview() {
         MoviesContent(
             moviesGroupedByYear = mockMoviesGroupedByYear,
             modifier = Modifier.padding(16.dp)
-        )
+        ){}
     }
 }
