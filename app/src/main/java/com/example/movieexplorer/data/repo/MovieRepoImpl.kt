@@ -8,6 +8,6 @@ class MovieRepoImpl(
 ) : MovieRepo {
     override suspend fun getPopularMovies() = remoteDataSource.getPopularMovies()
     override suspend fun searchMovies(query: String) = remoteDataSource.searchMovies(query)
-
     override suspend fun getMovieDetails(movieId: Int) = remoteDataSource.getMovieDetails(movieId)
+    override suspend fun getSimilarMovies(movieId: Int) = remoteDataSource.getSimilarMovies(movieId)
 }

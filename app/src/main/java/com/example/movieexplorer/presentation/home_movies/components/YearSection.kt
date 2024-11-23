@@ -47,6 +47,6 @@ fun YearSectionPreview() {
             year = "2024",
             movies = mockMovies,
             modifier = Modifier.padding(16.dp)
-        ){}
+        ) {}
     }
 }
