@@ -25,6 +25,6 @@
 
 ## Download APK
 
-- You can download the APK release from the link below:
-- [Download APK](https://github.com/mgida/MovieExplorer/commit/a5756e132548005ce537f2c2d07217d2a77f2e83) 
+- You can download the APK from the link below:
+- [Download APK](https://github.com/mgida/MovieExplorer/blob/cb6e2816ba130c6ca6dfc4f2e51e07340af8306d/app-debug.apk) 
 
