@@ -10,7 +10,9 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.movieexplorer.R
 import com.example.movieexplorer.ui.theme.MovieExplorerTheme
 import com.example.movieexplorer.util.ThemePreviews
 
@@ -29,7 +31,7 @@ fun SearchBar(
             .padding(16.dp),
         placeholder = {
             Text(
-                text = "Search movies...", style =
+                text = stringResource(R.string.search_movies), style =
                 MaterialTheme.typography.labelMedium
             )
         },

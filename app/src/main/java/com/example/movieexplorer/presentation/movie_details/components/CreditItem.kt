@@ -29,7 +29,7 @@ fun CreditItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, top = 8.dp, bottom = 8.dp)
+            .padding(start = 12.dp, top = 8.dp, bottom = 8.dp)
     ) {
         AsyncImage(
             model = profilePath,
@@ -48,7 +48,7 @@ fun CreditItem(
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                modifier = Modifier.padding(top = 4.dp),
+                modifier = Modifier.padding(top = 6.dp),
                 text = role,
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)

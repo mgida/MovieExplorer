@@ -9,7 +9,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.movieexplorer.R
 import com.example.movieexplorer.domain.model.movie_credits.CastModel
 import com.example.movieexplorer.domain.model.movie_credits.CrewModel
 import com.example.movieexplorer.ui.theme.MovieExplorerTheme
@@ -32,7 +34,7 @@ fun TopCreditsSection(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = "Top Actors",
+                text = stringResource(R.string.top_actors),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
@@ -50,7 +52,7 @@ fun TopCreditsSection(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = "Top Directors",
+                text = stringResource(R.string.top_directors),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)

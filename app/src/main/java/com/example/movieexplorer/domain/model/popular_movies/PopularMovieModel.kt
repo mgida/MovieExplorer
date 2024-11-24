@@ -6,6 +6,5 @@ data class PopularMovieModel(
     val title: String,
     val overview: String,
     val image: String,
-    val releaseDate: String,
-    val isFav: Boolean = false
+    val releaseDate: String
 )

@@ -13,6 +13,7 @@ import com.example.movieexplorer.domain.use_case.DeleteMovieUseCase
 import com.example.movieexplorer.domain.use_case.GetMovieCreditsUseCase
 import com.example.movieexplorer.domain.use_case.GetMovieDetailsUseCase
 import com.example.movieexplorer.domain.use_case.GetSimilarMoviesUseCase
+import com.example.movieexplorer.domain.use_case.GetWatchListUseCase
 import com.example.movieexplorer.domain.use_case.ProcessCreditsUseCase
 import com.example.movieexplorer.domain.use_case.SaveMovieUseCase
 import com.example.movieexplorer.presentation.movie_details.event.MovieDetailsEvent
@@ -22,8 +23,10 @@ import com.example.movieexplorer.presentation.movie_details.viewstate.SimilarMov
 import com.example.movieexplorer.util.MOVIE_ID_ARG
 import com.example.movieexplorer.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -40,6 +43,7 @@ class MovieDetailsViewModel @Inject constructor(
 
     private val deleteMovieUseCase: DeleteMovieUseCase,
     private val saveMovieUseCase: SaveMovieUseCase,
+    private val getWatchListUseCase: GetWatchListUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -56,12 +60,17 @@ class MovieDetailsViewModel @Inject constructor(
     private val _isInWatchlist = MutableStateFlow(false)
     val isInWatchlist: StateFlow<Boolean> = _isInWatchlist
 
+    private val _eventFlow = MutableSharedFlow<UiEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
+
     init {
         savedStateHandle.get<Int>(MOVIE_ID_ARG).also { movieId ->
             movieId?.let {
+
                 getMovieDetails(movieId = it)
                 getSimilarMovies(movieId = it)
                 getMovieCredits(movieId)
+                checkWatchlist(movieId)
             }
         }
     }
@@ -101,26 +110,40 @@ class MovieDetailsViewModel @Inject constructor(
         when (movieDetailsEvent) {
             is MovieDetailsEvent.GetMoviesDetails -> getMovieDetails(movieDetailsEvent.movieId)
             is MovieDetailsEvent.GetSimilarMovies -> getSimilarMovies(movieDetailsEvent.movieId)
+            is MovieDetailsEvent.CheckWatchList -> checkWatchlist(movieDetailsEvent.movieId)
         }
     }
-
 
     fun toggleWatchlist(movie: MovieDetailsModel) {
         viewModelScope.launch {
-            if (_isInWatchlist.value) {
-                deleteMovieUseCase(movie = movie)
+
+            val isCurrentlyInWatchlist = _isInWatchlist.value
+            _isInWatchlist.value = !isCurrentlyInWatchlist
+
+            if (isCurrentlyInWatchlist) {
+                val removedMovie = movie.copy(isInWatchList = false)
+                deleteMovieUseCase.invoke(movie)
+                _eventFlow.emit(UiEvent.RemoveMovieFromWatchList(removedMovie))
             } else {
-                saveMovieUseCase(movie = movie)
+                val savedMovie = movie.copy(isInWatchList = true)
+                saveMovieUseCase.invoke(movie)
+                _eventFlow.emit(UiEvent.SaveMovieToWatchList(savedMovie))
             }
-            _isInWatchlist.value = !_isInWatchlist.value
         }
     }
 
-//    fun checkWatchlist(movieId: Int) {
-//        viewModelScope.launch {
-//            _isInWatchlist.value = checkWatchlistUseCase(movieId)
-//        }
-//    }
+
+    private fun checkWatchlist(movieId: Int) {
+        getWatchListUseCase.invoke().onEach { resource: Resource<List<MovieDetailsModel>> ->
+
+            if (resource.data != null) {
+                val watchList = resource.data
+                val isInWatchList = watchList.any { it.id == movieId }
+                _isInWatchlist.value = isInWatchList
+            }
+
+        }.launchIn(viewModelScope)
+    }
 
     private fun getSimilarMovies(movieId: Int) {
         getSimilarMoviesUseCase.invoke(movieId = movieId)
@@ -173,5 +196,10 @@ class MovieDetailsViewModel @Inject constructor(
                 }
 
             }.launchIn(viewModelScope)
+    }
+
+    sealed class UiEvent {
+        data class SaveMovieToWatchList(val movie: MovieDetailsModel) : UiEvent()
+        data class RemoveMovieFromWatchList(val movie: MovieDetailsModel) : UiEvent()
     }
 }

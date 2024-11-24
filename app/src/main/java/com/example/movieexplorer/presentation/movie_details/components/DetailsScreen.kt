@@ -7,12 +7,19 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.movieexplorer.R
 import com.example.movieexplorer.domain.model.movie_credits.CastModel
 import com.example.movieexplorer.domain.model.movie_credits.CrewModel
 import com.example.movieexplorer.domain.model.similar_movies.SimilarMovieModel
@@ -22,6 +29,7 @@ import com.example.movieexplorer.presentation.common.LoadingIndicator
 import com.example.movieexplorer.presentation.movie_details.viewmodel.MovieDetailsViewModel
 import com.example.movieexplorer.presentation.movie_details.viewstate.CreditsViewState
 import com.example.movieexplorer.presentation.movie_details.viewstate.SimilarMoviesViewState
+import kotlinx.coroutines.flow.collectLatest
 
 
 private const val MAX_DISPLAYED_MOVIES = 5
@@ -37,6 +45,28 @@ fun DetailsScreen(
     val creditsState = viewModel.creditsViewState.collectAsState().value
 
     val isInWatchlist = viewModel.isInWatchlist.collectAsState().value
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    val savedMovieMsg = stringResource(id = R.string.add_to_watch_list)
+    val removedMovieMsg = stringResource(id = R.string.remove_from_watch_list)
+
+    LaunchedEffect(key1 = viewModel.eventFlow) {
+        viewModel.eventFlow.collectLatest { value: MovieDetailsViewModel.UiEvent ->
+            when (value) {
+                is MovieDetailsViewModel.UiEvent.RemoveMovieFromWatchList -> {
+                    snackbarHostState.showSnackbar(
+                        message = removedMovieMsg
+                    )
+                }
+
+                is MovieDetailsViewModel.UiEvent.SaveMovieToWatchList -> {
+                    snackbarHostState.showSnackbar(
+                        message = savedMovieMsg
+                    )
+                }
+            }
+        }
+    }
 
 
 
@@ -56,36 +86,46 @@ fun DetailsScreen(
             val actors = creditsState.actors
             val directors = creditsState.directors
 
-            Surface(
-                modifier = modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background
-            ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
-                ) {
 
-                    item {
-                        MainDetailsMovie(
-                            movieDetails = movieDetails,
-                            isInWatchlist = isInWatchlist,
-                            onWatchlistToggle = {
-                                viewModel.toggleWatchlist(movieDetails)
+
+            Scaffold(
+                snackbarHost = { SnackbarHost(snackbarHostState) },
+                content = { paddingValues ->
+                    Surface(
+                        modifier = modifier
+                            .fillMaxSize()
+                            .padding(paddingValues),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(16.dp)
+                        ) {
+
+                            item {
+                                MainDetailsMovie(
+                                    movieDetails = movieDetails,
+                                    isInWatchlist = isInWatchlist,
+                                    onWatchlistToggle = {
+                                        viewModel.toggleWatchlist(movieDetails)
+                                    }
+                                )
                             }
-                        )
+
+                            item { Spacer(modifier = Modifier.height(16.dp)) }
+
+                            item { SimilarMoviesContent(similarMoviesState, similarMovies) }
+
+                            item { Spacer(modifier = Modifier.height(16.dp)) }
+
+                            item { TopCreditsContent(creditsState, actors, directors) }
+
+                        }
                     }
-
-                    item { Spacer(modifier = Modifier.height(16.dp)) }
-
-                    item { SimilarMoviesContent(similarMoviesState, similarMovies) }
-
-                    item { Spacer(modifier = Modifier.height(16.dp)) }
-
-                    item { TopCreditsContent(creditsState, actors, directors) }
-
                 }
-            }
+            )
+
         }
     }
 }

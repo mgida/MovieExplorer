@@ -31,6 +31,8 @@ fun HomeContent(
     val state = viewModel.popularMoviesState.collectAsState().value
     var searchQuery by remember { mutableStateOf("") }
 
+    val watchlist = viewModel.watchListState.collectAsState().value
+
     Surface(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -56,7 +58,13 @@ fun HomeContent(
                     message = "No movies found. Try searching again."
                 )
 
-                else -> MoviesContent(modifier, state.data) { movieId ->
+                else -> MoviesContent(
+                    modifier, state.data,
+                    isInWatchlist = { movieId ->
+                        watchlist.any {
+                            it.id == movieId
+                        }
+                    }) { movieId ->
                     onNavigateToDetails.invoke(movieId)
                 }
             }

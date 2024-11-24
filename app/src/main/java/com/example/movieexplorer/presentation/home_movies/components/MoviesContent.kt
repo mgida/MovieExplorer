@@ -20,6 +20,7 @@ import timber.log.Timber
 fun MoviesContent(
     modifier: Modifier = Modifier,
     moviesGroupedByYear: List<PopularMoviesGroupedByYearModel>,
+    isInWatchlist: (Int) -> Boolean,
     onMovieClicked: (Int) -> Unit
 ) {
     SideEffect {
@@ -37,7 +38,11 @@ fun MoviesContent(
     ) {
 
         items(moviesGroupedByYear) { group ->
-            YearSection(year = group.year, movies = group.movies) { movieId ->
+            YearSection(
+                year = group.year,
+                movies = group.movies,
+                isInWatchlist = isInWatchlist
+            ) { movieId ->
                 onMovieClicked.invoke(movieId)
             }
         }
@@ -52,7 +57,8 @@ fun MoviesContentPreview() {
     MovieExplorerTheme {
         MoviesContent(
             moviesGroupedByYear = mockMoviesGroupedByYear,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
+            isInWatchlist = { true }
         ) {}
     }
 }

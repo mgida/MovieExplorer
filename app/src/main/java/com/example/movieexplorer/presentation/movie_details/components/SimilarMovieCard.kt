@@ -29,7 +29,7 @@ fun SimilarMovieCard(movie: SimilarMovieModel, modifier: Modifier = Modifier) {
     ) {
         Image(
             painter = rememberAsyncImagePainter(movie.image),
-            contentDescription = "Similar Movie Poster",
+            contentDescription = "",
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp)

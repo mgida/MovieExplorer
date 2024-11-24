@@ -9,7 +9,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.movieexplorer.R
 import com.example.movieexplorer.domain.model.similar_movies.SimilarMovieModel
 import com.example.movieexplorer.ui.theme.MovieExplorerTheme
 import com.example.movieexplorer.util.ThemePreviews
@@ -22,15 +24,15 @@ fun SimilarMoviesSection(
     Column(modifier = Modifier.fillMaxWidth()) {
 
         Text(
-            text = "Similar Movies",
+            text = stringResource(R.string.similar_movies),
             style = MaterialTheme.typography.headlineMedium.copy(
                 color = MaterialTheme.colorScheme.primary
             ),
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
         )
 
         LazyRow(
-            modifier = modifier.padding(horizontal = 16.dp)
+            modifier = modifier.padding(horizontal = 12.dp)
         ) {
             items(similarMovies) { movie ->
                 SimilarMovieCard(movie = movie)

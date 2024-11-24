@@ -23,13 +23,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import com.example.movieexplorer.R
 import com.example.movieexplorer.domain.model.movie_details.MovieDetailsModel
 import com.example.movieexplorer.util.ThemePreviews
-
 
 @Composable
 fun MainDetailsSection(
@@ -39,15 +40,14 @@ fun MainDetailsSection(
     onWatchListToggle: (MovieDetailsModel) -> Unit
 ) {
 
-
     Box(modifier = Modifier.fillMaxWidth()) {
         Image(
             painter = rememberAsyncImagePainter(movieDetails.image),
-            contentDescription = "Movie Poster",
+            contentDescription = "",
             modifier = modifier
                 .fillMaxWidth()
                 .height(300.dp)
-                .clip(RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)),
+                .clip(RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp)),
             contentScale = ContentScale.Crop
         )
 
@@ -64,7 +64,7 @@ fun MainDetailsSection(
         ) {
             Icon(
                 imageVector = if (isInWatchList) Icons.Default.Check else Icons.Default.Add,
-                contentDescription = if (isInWatchList) "Remove from Watch List" else "Add to Watch List",
+                contentDescription = "",
                 tint = MaterialTheme.colorScheme.primary
             )
         }
@@ -76,7 +76,7 @@ fun MainDetailsSection(
             text = movieDetails.title,
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
+            modifier = Modifier.padding(top = 16.dp, start = 12.dp, end = 12.dp)
         )
 
         Text(
@@ -84,7 +84,7 @@ fun MainDetailsSection(
             style = MaterialTheme.typography.bodyMedium.copy(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             ),
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
         )
 
         Text(
@@ -92,39 +92,32 @@ fun MainDetailsSection(
             style = MaterialTheme.typography.bodyMedium.copy(
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8F)
             ),
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
             maxLines = 3,
             overflow = TextOverflow.Ellipsis,
             lineHeight = 20.sp
         )
 
-        Text(
-            text = "Release Date: ${movieDetails.releaseDate}",
-            style = MaterialTheme.typography.bodySmall.copy(
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8F)
-            ),
-            modifier = Modifier.padding(horizontal = 16.dp)
-        )
+        TextDetailInfo(info = stringResource(R.string.release_date, movieDetails.releaseDate))
 
         Spacer(modifier = Modifier.height(6.dp))
 
-        Text(
-            text = "Status: ${movieDetails.status}",
-            style = MaterialTheme.typography.bodySmall.copy(
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8F)
-            ),
-            modifier = Modifier.padding(horizontal = 16.dp)
-        )
+        TextDetailInfo(info = stringResource(R.string.status, movieDetails.status))
 
-        Text(
-            text = "Revenue: ${movieDetails.revenue}",
-            style = MaterialTheme.typography.bodySmall.copy(
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8F)
-            ),
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
-        )
+        TextDetailInfo(info = stringResource(R.string.revenue, movieDetails.revenue))
     }
 
+}
+
+@Composable
+private fun TextDetailInfo(info: String) {
+    Text(
+        text = info,
+        style = MaterialTheme.typography.bodySmall.copy(
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8F)
+        ),
+        modifier = Modifier.padding(horizontal = 12.dp)
+    )
 }
 
 @ThemePreviews

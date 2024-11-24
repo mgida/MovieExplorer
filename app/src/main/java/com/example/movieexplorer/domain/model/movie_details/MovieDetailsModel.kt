@@ -14,4 +14,5 @@ data class MovieDetailsModel(
     val status: String,
     val tagLine: String,
     val revenue: String,
+    val isInWatchList: Boolean = false
 )

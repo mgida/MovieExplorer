@@ -7,12 +7,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import com.example.movieexplorer.R
 import com.example.movieexplorer.ui.theme.MovieExplorerTheme
 import com.example.movieexplorer.util.ThemePreviews
 
 @Composable
-fun EmptyStateMessage(modifier: Modifier = Modifier, message: String = "No data available.") {
+fun EmptyStateMessage(
+    modifier: Modifier = Modifier,
+    message: String = stringResource(R.string.no_data_available)
+) {
     Box(
         modifier = modifier
             .fillMaxSize(),

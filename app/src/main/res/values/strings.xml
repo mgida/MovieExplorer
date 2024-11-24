@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">MovieExplorer</string>
+    <string name="no_data_available">No data available.</string>
+    <string name="search_movies">Search movies...</string>
+    <string name="year">Year %1$s</string>
+    <string name="similar_movies">Similar Movies</string>
+    <string name="top_actors">Top Actors</string>
+    <string name="top_directors">Top Directors</string>
+    <string name="remove_from_watch_list">Remove from Watch List</string>
+    <string name="add_to_watch_list">Add to Watch List</string>
+    <string name="release_date">Release Date: %1$s</string>
+    <string name="status">Status: %1$s</string>
+    <string name="revenue">Revenue: %1$s</string>
+    <string name="in_watchlist">In Watchlist</string>
 </resources>
